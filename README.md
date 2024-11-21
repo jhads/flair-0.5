@@ -1,3 +1,30 @@
+# Flair 0.5 Fork
+
+This repository is a fork of [Flair](https://github.com/flairNLP/flair), a state-of-the-art NLP library.
+
+## Why This Fork?
+- **Dependency Management**: The `label-parser` project relies on this package.
+- **Version Control**: We maintain this fork to track specific versions (`0.5.0` in this case, specifically commit 63aeabf9a18bdf53af3bcba5bd80f43ac717656e) used in `label-parser`.
+
+
+## What's Updated?
+
+A small change was made to the `LanguageModel` class to handle the `flatten_parameters` method of RNNs more gracefully. Specifically:
+
+```diff
+@@ -75,7 +75,7 @@ class LanguageModel(nn.Module):
+         encoded = self.encoder(input)
+         emb = self.drop(encoded)
+
+-        self.rnn.flatten_parameters()
++        if hasattr(self.rnn, "flatten_parameters"): self.rnn.flatten_parameters()
+
+         output, hidden = self.rnn(emb, hidden)
+```
+
+
+<br><br><br>
+
 ![alt text](resources/docs/flair_logo_2020.png)
 
 [![PyPI version](https://badge.fury.io/py/flair.svg)](https://badge.fury.io/py/flair)
@@ -19,10 +46,10 @@ models to your text, such as named entity recognition (NER), part-of-speech tagg
 * **Multilingual.** Thanks to the Flair community, we support a rapidly growing number of languages. We also now include
 '*one model, many languages*' taggers, i.e. single models that predict PoS or NER tags for input text in various languages.
 
-* **A text embedding library.** Flair has simple interfaces that allow you to use and combine different word and 
+* **A text embedding library.** Flair has simple interfaces that allow you to use and combine different word and
 document embeddings, including our proposed **[Flair embeddings](https://drive.google.com/file/d/17yVpFA7MmXaQFTe-HDpZuqw9fJlmzg56/view?usp=sharing)**, BERT embeddings and ELMo embeddings.
 
-* **A PyTorch NLP framework.** Our framework builds directly on [PyTorch](https://pytorch.org/), making it easy to 
+* **A PyTorch NLP framework.** Our framework builds directly on [PyTorch](https://pytorch.org/), making it easy to
 train your own models and experiment with new approaches using Flair embeddings and classes.
 
 Now at [version 0.5](https://github.com/flairNLP/flair/releases)!
@@ -46,7 +73,7 @@ Flair outperforms the previous best methods on a range of NLP tasks:
 Here's how to [reproduce these numbers](/resources/docs/EXPERIMENTS.md) using Flair. You can also find detailed evaluations and discussions in our papers:
 
 * *[Contextual String Embeddings for Sequence Labeling](https://www.aclweb.org/anthology/C18-1139/).
-Alan Akbik, Duncan Blythe and Roland Vollgraf. 
+Alan Akbik, Duncan Blythe and Roland Vollgraf.
 27th International Conference on Computational Linguistics, **COLING 2018**.*
 
 * *[Pooled Contextualized Embeddings for Named Entity Recognition](https://www.aclweb.org/anthology/papers/N/N19/N19-1078/).
@@ -71,7 +98,7 @@ pip install flair
 
 ### Example Usage
 
-Let's run named entity recognition (NER) over an example sentence. All you need to do is make a `Sentence`, load 
+Let's run named entity recognition (NER) over an example sentence. All you need to do is make a `Sentence`, load
 a pre-trained model and use it to predict tags for the sentence:
 
 ```python
@@ -99,12 +126,12 @@ for entity in sentence.get_spans('ner'):
     print(entity)
 ```
 
-This should print: 
+This should print:
 
 ```console
 Sentence: "I love Berlin ." - 4 Tokens
 
-The following NER tags are found: 
+The following NER tags are found:
 
 Span [3]: "Berlin"   [− Labels: LOC (0.9992)]
 ```
@@ -121,12 +148,12 @@ We provide a set of quick tutorials to get you started with the library:
 * [Tutorial 6: Loading a Dataset](/resources/docs/TUTORIAL_6_CORPUS.md)
 * [Tutorial 7: Training a Model](/resources/docs/TUTORIAL_7_TRAINING_A_MODEL.md)
 * [Tutorial 8: Training your own Flair Embeddings](/resources/docs/TUTORIAL_9_TRAINING_LM_EMBEDDINGS.md)
- 
+
 The tutorials explain how the base NLP classes work, how you can load pre-trained models to tag your
-text, how you can embed your text with different word or document embeddings, and how you can train your own 
+text, how you can embed your text with different word or document embeddings, and how you can train your own
 language models, sequence labeling models, and text classification models. Let us know if anything is unclear.
 
-There are also good third-party articles and posts that illustrate how to use Flair: 
+There are also good third-party articles and posts that illustrate how to use Flair:
 * [How to build a text classifier with Flair](https://towardsdatascience.com/text-classification-with-state-of-the-art-nlp-library-flair-b541d7add21f)
 * [How to build a microservice with Flair and Flask](https://shekhargulati.com/2019/01/04/building-a-sentiment-analysis-python-microservice-with-flair-and-flask/)
 * [A docker image for Flair](https://towardsdatascience.com/docker-image-for-nlp-5402c9a9069e)
@@ -137,7 +164,7 @@ There are also good third-party articles and posts that illustrate how to use Fl
 
 ## Citing Flair
 
-Please cite the following paper when using Flair: 
+Please cite the following paper when using Flair:
 
 ```
 @inproceedings{akbik2018coling,
@@ -161,18 +188,18 @@ If you use the pooled version of the Flair embeddings (PooledFlairEmbeddings), p
 }
 ```
 
-## Contact 
+## Contact
 
 Please email your questions or comments to [Alan Akbik](http://alanakbik.github.io/).
 
 ## Contributing
 
-Thanks for your interest in contributing! There are many ways to get involved; 
-start with our [contributor guidelines](CONTRIBUTING.md) and then 
+Thanks for your interest in contributing! There are many ways to get involved;
+start with our [contributor guidelines](CONTRIBUTING.md) and then
 check these [open issues](https://github.com/flairNLP/flair/issues) for specific tasks.
 
-For contributors looking to get deeper into the API we suggest cloning the repository and checking out the unit 
-tests for examples of how to call methods. Nearly all classes and methods are documented, so finding your way around 
+For contributors looking to get deeper into the API we suggest cloning the repository and checking out the unit
+tests for examples of how to call methods. Nearly all classes and methods are documented, so finding your way around
 the code should hopefully be easy.
 
 ### Running unit tests locally
@@ -219,4 +246,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
